@@ -8,6 +8,11 @@ function Dashboard() {
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
 
+  const goToLessons = () => {
+    window.history.pushState({}, "", "/lessons");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  };
+
   return (
     <div
       className={`relative min-h-screen overflow-hidden transition-colors duration-500 ${
@@ -30,7 +35,7 @@ function Dashboard() {
         />
       </video>
 
-      {/* Theme-based Video Layer */}
+      {/* Theme Overlay */}
       <div
         className={`fixed inset-0 z-[1] transition-colors duration-500 ${
           darkMode ? "bg-black/45" : "bg-white/65"
@@ -40,12 +45,16 @@ function Dashboard() {
       {/* Main Content */}
       <div className="relative z-10 min-h-screen">
 
-        {/* Navbar */}
-        <nav
-          className={`mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8`}
-        >
+        {/* ================= NAVBAR ================= */}
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
+
           {/* Logo */}
-          <h1
+          <button
+            type="button"
+            onClick={() => {
+              window.history.pushState({}, "", "/");
+              window.dispatchEvent(new PopStateEvent("popstate"));
+            }}
             className={`text-3xl tracking-tight transition-colors duration-500 ${
               darkMode ? "text-white" : "text-slate-900"
             }`}
@@ -55,7 +64,7 @@ function Dashboard() {
             <span className={darkMode ? "text-cyan-300" : "text-blue-600"}>
               Mentor
             </span>
-          </h1>
+          </button>
 
           {/* Navigation */}
           <div
@@ -63,49 +72,66 @@ function Dashboard() {
               darkMode ? "text-white/60" : "text-slate-600"
             }`}
           >
-            <a
-              href="#dashboard"
+            <button
+              type="button"
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }
               className={`transition-colors ${
                 darkMode
                   ? "text-white"
-                  : "text-slate-900 font-semibold"
+                  : "font-semibold text-slate-900"
               }`}
             >
               Dashboard
-            </a>
+            </button>
 
-            <a
-              href="#lessons"
+            {/* LESSONS */}
+            <button
+              type="button"
+              onClick={goToLessons}
               className="transition-colors hover:text-blue-600"
             >
               Lessons
-            </a>
+            </button>
 
-            <a
-              href="#editor"
+            <button
+              type="button"
+              onClick={() => {
+                document
+                  .getElementById("editor")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="transition-colors hover:text-blue-600"
             >
               Virtual Editor
-            </a>
+            </button>
 
-            <a
-              href="#progress"
+            <button
+              type="button"
+              onClick={() => {
+                document
+                  .getElementById("progress")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="transition-colors hover:text-blue-600"
             >
               Progress
-            </a>
+            </button>
           </div>
 
           {/* Right Side */}
           <div className="flex items-center gap-3">
 
-            {/* Theme Button */}
+            {/* Theme */}
             <button
+              type="button"
               onClick={toggleTheme}
               className={`liquid-glass flex h-10 w-10 items-center justify-center rounded-full text-lg transition duration-300 hover:scale-110 ${
-                darkMode
-                  ? "text-white"
-                  : "text-slate-900"
+                darkMode ? "text-white" : "text-slate-900"
               }`}
               aria-label="Toggle theme"
             >
@@ -114,11 +140,10 @@ function Dashboard() {
 
             {/* Login */}
             <button
+              type="button"
               onClick={goToLogin}
               className={`liquid-glass rounded-full px-6 py-2.5 text-sm transition duration-300 hover:scale-[1.03] ${
-                darkMode
-                  ? "text-white"
-                  : "text-slate-900"
+                darkMode ? "text-white" : "text-slate-900"
               }`}
             >
               Login
@@ -126,7 +151,7 @@ function Dashboard() {
           </div>
         </nav>
 
-        {/* Hero */}
+        {/* ================= HERO ================= */}
         <main id="dashboard">
 
           <section className="mx-auto flex min-h-[calc(100vh-100px)] max-w-7xl flex-col items-center justify-center px-6 py-20 text-center">
@@ -181,18 +206,24 @@ function Dashboard() {
             {/* CTA */}
             <div className="mt-12 flex flex-wrap justify-center gap-4 animate-fade-rise-delay-2">
 
+              {/* START LEARNING → LESSONS */}
               <button
-                onClick={goToLogin}
+                type="button"
+                onClick={goToLessons}
                 className={`liquid-glass rounded-full px-12 py-4 text-base transition duration-300 hover:scale-[1.03] ${
-                  darkMode
-                    ? "text-white"
-                    : "text-slate-900"
+                  darkMode ? "text-white" : "text-slate-900"
                 }`}
               >
                 Start Learning →
               </button>
 
               <button
+                type="button"
+                onClick={() =>
+                  document
+                    .getElementById("editor")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 className={`liquid-glass rounded-full px-10 py-4 text-base transition duration-300 hover:scale-[1.03] ${
                   darkMode
                     ? "text-white/80 hover:text-white"
@@ -206,7 +237,6 @@ function Dashboard() {
             {/* Stats */}
             <div className="mt-20 grid w-full max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
 
-              {/* Lessons */}
               <div className="liquid-glass rounded-2xl p-5 text-left transition duration-300 hover:-translate-y-1">
                 <p
                   className={
@@ -235,7 +265,6 @@ function Dashboard() {
                 </p>
               </div>
 
-              {/* Streak */}
               <div className="liquid-glass rounded-2xl p-5 text-left transition duration-300 hover:-translate-y-1">
                 <p
                   className={
@@ -260,7 +289,6 @@ function Dashboard() {
                 </p>
               </div>
 
-              {/* Progress */}
               <div className="liquid-glass rounded-2xl p-5 text-left transition duration-300 hover:-translate-y-1">
                 <p
                   className={
@@ -293,7 +321,6 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Achievements */}
               <div className="liquid-glass rounded-2xl p-5 text-left transition duration-300 hover:-translate-y-1">
                 <p
                   className={
@@ -324,7 +351,7 @@ function Dashboard() {
             </div>
           </section>
 
-          {/* Learning Cards */}
+          {/* ================= LEARNING CARDS ================= */}
           <section
             id="lessons"
             className="mx-auto grid max-w-7xl gap-6 px-6 pb-24 md:grid-cols-2"
@@ -332,6 +359,7 @@ function Dashboard() {
 
             {/* Continue Learning */}
             <div className="liquid-glass rounded-3xl p-8 transition duration-500 hover:-translate-y-2">
+
               <p
                 className={`text-sm font-medium tracking-widest ${
                   darkMode ? "text-cyan-300" : "text-blue-600"
@@ -358,7 +386,10 @@ function Dashboard() {
                 through practical learning and coding challenges.
               </p>
 
+              {/* CONTINUE → LESSONS */}
               <button
+                type="button"
+                onClick={goToLessons}
                 className={`liquid-glass mt-7 rounded-full px-7 py-3 text-sm transition hover:scale-105 ${
                   darkMode ? "text-white" : "text-slate-900"
                 }`}
@@ -399,6 +430,7 @@ function Dashboard() {
               </p>
 
               <button
+                type="button"
                 className={`liquid-glass mt-7 rounded-full px-7 py-3 text-sm transition hover:scale-105 ${
                   darkMode ? "text-white" : "text-slate-900"
                 }`}
@@ -408,7 +440,7 @@ function Dashboard() {
             </div>
           </section>
 
-          {/* Progress */}
+          {/* ================= PROGRESS ================= */}
           <section
             id="progress"
             className="mx-auto max-w-7xl px-6 pb-24"
@@ -481,7 +513,6 @@ function Dashboard() {
           };
 
           background-blend-mode: luminosity;
-
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
 

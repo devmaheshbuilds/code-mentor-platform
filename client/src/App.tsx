@@ -1,44 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
 
 import { MentorProvider } from "./context/MentorContext";
-
 import { DiagonalCarousel } from "./carousel/DiagonalCarousel";
-
 import { LessonPage } from "./pages/LessonPage";
 
 import "./App.css";
 import "./pages/LessonPage.css";
 
-export default function App() {
-  const [selectedLesson, setSelectedLesson] =
-    useState<string | null>(null);
+function App() {
+  const [path, setPath] = useState(window.location.pathname);
+  const [selectedLesson, setSelectedLesson] = useState<string | null>(null);
 
-  return (
-    <MentorProvider>
+  useEffect(() => {
+    const handlePopState = () => {
+      setPath(window.location.pathname);
+      setSelectedLesson(null);
+    };
 
-      {selectedLesson ? (
+    window.addEventListener("popstate", handlePopState);
 
-        <LessonPage
-          lessonId={selectedLesson}
-          onBack={() =>
-            setSelectedLesson(null)
-          }
-        />
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
-      ) : (
+  // LOGIN
+  if (path === "/login") {
+    return <Login />;
+  }
 
-        <div className="app-shell">
+  // SIGNUP
+  if (path === "/signup") {
+    return <Signup />;
+  }
 
-          <DiagonalCarousel
-            onLessonStart={(lessonId) =>
-              setSelectedLesson(lessonId)
-            }
+  // LESSONS
+  if (path === "/lessons") {
+    return (
+      <MentorProvider>
+        {selectedLesson ? (
+          <LessonPage
+            lessonId={selectedLesson}
+            onBack={() => {
+              setSelectedLesson(null);
+            }}
           />
+        ) : (
+          <div className="app-shell">
+            <DiagonalCarousel
+              onLessonStart={(lessonId) => {
+                setSelectedLesson(lessonId);
+              }}
+            />
+          </div>
+        )}
+      </MentorProvider>
+    );
+  }
 
-        </div>
-
-      )}
-
-    </MentorProvider>
-  );
+  // DASHBOARD
+  return <Dashboard />;
 }
+
+export default App;
