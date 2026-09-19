@@ -54,4 +54,17 @@ const updateProgress = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, result.rows[0], "Progress updated successfully"));
 });
 
-module.exports = { getProgress, updateProgress };
+const getMyProgress = asyncHandler(async (req, res) => {
+    const user_id = req.user.id;
+
+    const result = await pool.query(
+        "SELECT * FROM progress WHERE user_id = $1",
+        [user_id]
+    );
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, result.rows, "Your progress fetched successfully"));
+});
+
+module.exports = { getProgress, updateProgress, getMyProgress};
