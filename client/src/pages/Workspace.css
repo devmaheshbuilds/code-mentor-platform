@@ -1,0 +1,45 @@
+.workspace {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.workspace__hero h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--brand-red);
+}
+
+.workspace__hero p {
+  margin: 0.35rem 0 0;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.workspace__steps {
+  margin: 0;
+  padding: 0.8rem 0.8rem 0.8rem 2rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.workspace__steps li + li {
+  margin-top: 0.25rem;
+}
+
+.workspace__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (max-width: 800px) {
+  .workspace__grid {
+    grid-template-columns: 1fr;
+  }
+}

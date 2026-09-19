@@ -1,0 +1,105 @@
+.hint-panel {
+  min-height: 0;
+}
+
+.hint-panel__focus {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  background: #163d28;
+  color: #e8fff3;
+  font-weight: 400;
+}
+
+.hint-panel__focus code {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.hint-panel__status {
+  margin: 0.2rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.hint-panel__thread {
+  flex: 1;
+  min-height: 260px;
+  max-height: 420px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.hint-bubble {
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.hint-bubble h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+}
+
+.hint-bubble p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;
+  font-weight: 400;
+}
+
+.hint-bubble--you {
+  align-self: flex-end;
+  background: #e8f4ea;
+  border-color: #b7d8bf;
+  max-width: 90%;
+}
+
+.hint-bubble--mentor,
+.hint-bubble--welcome {
+  background: #eef6fb;
+  border-color: #b7d0e4;
+}
+
+.hint-panel__prompt {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.hint-panel__interact {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.hint-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hint-panel__own {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hint-panel__own input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  background: #fff;
+  color: var(--ink);
+}
+
+.hint-panel__own input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}

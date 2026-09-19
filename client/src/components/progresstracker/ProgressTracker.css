@@ -1,0 +1,76 @@
+.progress__meter {
+  height: 8px;
+  border-radius: 999px;
+  background: #d7e4ef;
+  overflow: hidden;
+}
+
+.progress__meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #1f6fbf);
+  transition: width 240ms ease;
+}
+
+.progress__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.progress__stats li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.7rem;
+  border-radius: 10px;
+  background: #f4f8fb;
+  text-align: center;
+}
+
+.progress__stats strong {
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.progress__stats span {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.progress__challenges {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.progress__challenge {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.progress__challenge span:last-child {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.progress__challenge.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.progress__challenge.is-done span:last-child {
+  color: var(--success);
+  font-weight: 600;
+}

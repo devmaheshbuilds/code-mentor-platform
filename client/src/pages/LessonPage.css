@@ -1,0 +1,303 @@
+/* =========================================
+   CODEMENTOR LESSON PAGE
+   ========================================= */
+
+.lesson-page {
+  width: 100%;
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  padding: 40px 7% 70px;
+
+  background: #050505;
+  color: white;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   BACK BUTTON
+   ========================================= */
+
+.back-button {
+  border: none;
+  background: transparent;
+
+  color: #aaa;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  margin-bottom: 45px;
+
+  padding: 8px 0;
+}
+
+.back-button:hover {
+  color: white;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.lesson-page-header {
+  max-width: 850px;
+
+  margin-bottom: 45px;
+}
+
+.lesson-page-header span {
+  color: #00a99d;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.lesson-page-header h1 {
+  margin: 12px 0;
+
+  font-size: 48px;
+
+  line-height: 1.1;
+
+  font-weight: 800;
+}
+
+.lesson-page-header p {
+  margin: 0;
+
+  color: #999;
+
+  font-size: 18px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   TOPICS
+   ========================================= */
+
+.subtopics-container {
+  width: 100%;
+  max-width: 900px;
+
+  padding-bottom: 30px;
+}
+
+.subtopics-container h2 {
+  font-size: 26px;
+
+  margin: 0 0 22px;
+}
+
+
+/* =========================================
+   TOPIC LIST
+   ========================================= */
+
+.subtopics-list {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding-bottom: 30px;
+}
+
+
+/* =========================================
+   TOPIC CARD
+   ========================================= */
+
+.subtopic-card {
+  width: 100%;
+
+  min-height: 82px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 22px;
+
+  padding: 18px 24px;
+
+  border: 1px solid #222;
+
+  border-radius: 18px;
+
+  background: #0d0d0d;
+
+  color: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.subtopic-card:hover {
+  border-color: #00a99d;
+
+  background: #101515;
+
+  transform: translateX(5px);
+}
+
+
+/* =========================================
+   NUMBER
+   ========================================= */
+
+.subtopic-number {
+  width: 45px;
+  height: 45px;
+
+  min-width: 45px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #12302e;
+
+  color: #00a99d;
+
+  font-weight: 700;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   CONTENT
+   ========================================= */
+
+.subtopic-content {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.subtopic-content h3 {
+  margin: 0 0 5px;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.subtopic-content p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   ARROW
+   ========================================= */
+
+.subtopic-arrow {
+  font-size: 24px;
+
+  color: #666;
+
+  flex-shrink: 0;
+}
+
+.subtopic-card:hover .subtopic-arrow {
+  color: #00a99d;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+  .lesson-page {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40px 7% 70px;
+  background: #050505;
+  color: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+  .back-button {
+    margin-bottom: 35px;
+  }
+
+  .lesson-page-header {
+    margin-bottom: 35px;
+  }
+
+  .lesson-page-header h1 {
+    font-size: 34px;
+  }
+
+  .lesson-page-header p {
+    font-size: 16px;
+  }
+
+  .subtopics-container h2 {
+    font-size: 23px;
+  }
+
+  .subtopic-card {
+    min-height: 75px;
+
+    padding: 15px;
+
+    gap: 14px;
+  }
+
+  .subtopic-number {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+  }
+
+  .subtopic-content h3 {
+    font-size: 16px;
+  }
+
+  .subtopic-content p {
+    font-size: 13px;
+  }
+
+  .subtopic-arrow {
+    font-size: 20px;
+  }
+}

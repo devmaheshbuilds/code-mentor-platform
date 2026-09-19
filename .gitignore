@@ -145,3 +145,6 @@ venv/
 .venv/
 env/
 *.egg-info/
+
+# Local model weights — too large for git
+ai-service/models/

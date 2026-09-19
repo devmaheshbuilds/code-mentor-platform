@@ -1,9 +1,13 @@
+/**
+ * Error shape used by controllers when a query or check fails.
+ * The Express error middleware reads statusCode / message / errors.
+ */
 class ApiError extends Error {
     constructor(
         statusCode,
-        message = "Something went wrong",
+        message = 'Something went wrong',
         errors = [],
-        stack = ""
+        stack = ''
     ) {
         super(message);
         this.statusCode = statusCode;
