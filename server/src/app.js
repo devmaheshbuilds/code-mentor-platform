@@ -19,7 +19,9 @@ const test_casesRoutes = require('./routes/test_cases.routes');
 const progressRoutes = require('./routes/progress.routes');
 const hint_logsRoutes = require('./routes/hint_logs.routes');
 const paste_eventsRoutes = require('./routes/paste_events.routes');
+const mentorRoutes = require('./routes/mentor.routes');
 
+app.use('/api/mentor', mentorRoutes);
 app.use('/api/languages', languageRoutes);
 app.use('/api/module', moduleRoutes);
 app.use('/api/lessons', lessonRoutes);
