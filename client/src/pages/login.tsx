@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { supabase } from "../lib/supabase";
 
 export default function Login() {
   const { darkMode, toggleTheme } = useTheme();
@@ -7,10 +8,26 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    console.log("Logged in:", data.session.access_token);
+    // TODO: navigate to dashboard once routing is wired
+  };
+
   const goToSignup = () => {
     window.history.pushState({}, "", "/signup");
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
+
 
   return (
     <div className={`login-page ${darkMode ? "night" : "light"}`}>
@@ -543,7 +560,7 @@ export default function Login() {
               </button>
             </div>
 
-            <button className="login-btn" type="button">
+            <button className="login-btn" type="button" onClick={handleLogin}>
               Sign In
             </button>
 

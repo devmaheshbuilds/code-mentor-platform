@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { supabase } from "../lib/supabase";
 
 export default function Signup() {
   const { darkMode, toggleTheme } = useTheme();
@@ -9,6 +10,32 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignup = async () => {
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  const {  error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        first_name: firstName,
+        last_name: lastName,
+      },
+    },
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert("Account created! Check your email to confirm, or try logging in.");
+  goToLogin();
+};
 
   const goToLogin = () => {
     window.history.pushState({}, "", "/login");
@@ -581,10 +608,7 @@ export default function Signup() {
               />
             </div>
 
-            <button
-              className="signup-btn"
-              type="button"
-            >
+            <button className="signup-btn" type="button" onClick={handleSignup}>
               Sign Up
             </button>
 

@@ -1,16 +1,22 @@
-/**
- * Individual lessons inside a module.
- * GET /api/lessons
- */
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const pool = require('../config/db');
 
 const getLessons = asyncHandler(async (req, res) => {
-    const result = await pool.query(
-        'SELECT * FROM lessons ORDER BY sequence_no'
-    );
+    const { module_id } = req.query;
+
+    let result;
+    if (module_id) {
+        result = await pool.query(
+            'SELECT * FROM lessons WHERE module_id = $1 ORDER BY sequence_no',
+            [module_id]
+        );
+    } else {
+        result = await pool.query(
+            'SELECT * FROM lessons ORDER BY sequence_no'
+        );
+    }
 
     if (!result.rows) {
         throw new ApiError(500, 'Failed to fetch lessons');
