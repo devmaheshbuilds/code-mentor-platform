@@ -1,0 +1,136 @@
+import { useEffect, useState } from 'react'
+import type { CarouselItem } from './items'
+import { STAGE, coverScale, slotOffset } from './geometry'
+import {
+  useCarouselTrack,
+  type TrackOptions,
+} from './useCarouselTrack'
+import { TrackItem } from './TrackItem'
+import './carousel.css'
+
+export type DiagonalCarouselProps = Omit<TrackOptions, 'count'> & {
+  items: CarouselItem[]
+
+  onCenterChange?: (
+    item: CarouselItem,
+    index: number,
+  ) => void
+
+  onLessonStart?: (lessonId: string) => void
+
+  className?: string
+}
+
+function useCoverScale() {
+  const [scale, setScale] = useState(() =>
+    typeof window === 'undefined'
+      ? 1
+      : coverScale(window.innerWidth, window.innerHeight),
+  )
+
+  useEffect(() => {
+    function update() {
+      setScale(
+        coverScale(
+          window.innerWidth,
+          window.innerHeight,
+        ),
+      )
+    }
+
+    update()
+
+    window.addEventListener('resize', update)
+
+    return () => {
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  return scale
+}
+
+export function DiagonalCarousel({
+  items,
+  onCenterChange,
+  onLessonStart,
+  className,
+  ...options
+}: DiagonalCarouselProps) {
+  const [track, surfaceRef] = useCarouselTrack({
+    count: items.length,
+    ...options,
+  })
+
+  const scale = useCoverScale()
+
+  const { progress, centerIndex } = track
+
+  useEffect(() => {
+    const centeredItem = items[centerIndex]
+
+    if (!centeredItem) {
+      return
+    }
+
+    onCenterChange?.(
+      centeredItem,
+      centerIndex,
+    )
+  }, [
+    centerIndex,
+    items,
+    onCenterChange,
+  ])
+
+  return (
+    <div
+      ref={surfaceRef}
+      className={[
+        'dc-surface',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Python Lessons"
+    >
+      <div
+        className="dc-stage"
+        style={{
+          width: STAGE.w,
+          height: STAGE.h,
+          transform: `translate(-50%, -50%) scale(${scale})`,
+        }}
+      >
+        {items.map((item, index) => {
+          const slot = slotOffset(
+            index,
+            progress,
+            items.length,
+          )
+
+          return (
+            <TrackItem
+              key={item.id}
+              item={item}
+              slot={slot}
+              centered={index === centerIndex}
+              onStart={() =>
+                onLessonStart?.(item.id)
+              }
+            />
+          )
+        })}
+      </div>
+
+      <p
+        className="dc-live"
+        aria-live="polite"
+      >
+        {items[centerIndex]?.label}
+      </p>
+    </div>
+  )
+}

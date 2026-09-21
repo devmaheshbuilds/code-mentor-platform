@@ -1,0 +1,230 @@
+.lesson-page {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 3rem;
+}
+
+.lesson-page__header {
+  margin-bottom: 1.25rem;
+}
+
+.lesson-page__back {
+  margin-bottom: 1.25rem;
+}
+
+.lesson-page__eyebrow,
+.lesson-page__section-label {
+  color: var(--brand-red);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.lesson-page__header h1 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.lesson-page__header p {
+  margin: 0.45rem 0 0;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.lesson-page__explanation,
+.lesson-page__visual {
+  margin-bottom: 1rem;
+  padding: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(16, 38, 59, 0.04);
+}
+
+.lesson-page__explanation h2,
+.lesson-page__visual h2,
+.lesson-page__editor h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.25rem;
+}
+
+.lesson-page__explanation > p {
+  max-width: 900px;
+  margin: 0.7rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.96rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.lesson-page__visual-header,
+.lesson-page__editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.lesson-page__visual-header p,
+.lesson-page__editor-header p {
+  margin: 0.45rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.lesson-page__visual-type {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lesson-page__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.lesson-page__step {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.lesson-page__step span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--brand-red);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lesson-page__step p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.lesson-page__video-placeholder {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.lesson-page__video-placeholder p {
+  margin: 0 0 0.35rem;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+.lesson-page__video-placeholder a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Editor + AI Mentor workspace */
+
+.lesson-page__workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.75fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.lesson-page__editor {
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 30px rgba(16, 38, 59, 0.04);
+}
+
+.lesson-page__editor-header {
+  margin-bottom: 0.9rem;
+}
+
+.lesson-page__editor-header .btn {
+  flex: 0 0 auto;
+}
+
+.lesson-page__monaco {
+  overflow: hidden;
+  border: 1px solid #263238;
+  border-radius: 12px;
+  background: #1e1e1e;
+}
+
+.lesson-page__output {
+  overflow: hidden;
+  margin-top: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.lesson-page__output-header {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+}
+
+.lesson-page__output-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.lesson-page__output pre {
+  min-height: 90px;
+  margin: 0;
+  padding: 0.85rem;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+  .lesson-page__workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .lesson-page__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .lesson-page {
+    width: min(100% - 1rem, 1180px);
+    padding-top: 1rem;
+  }
+
+  .lesson-page__visual-header,
+  .lesson-page__editor-header {
+    flex-direction: column;
+  }
+
+  .lesson-page__steps {
+    grid-template-columns: 1fr;
+  }
+}

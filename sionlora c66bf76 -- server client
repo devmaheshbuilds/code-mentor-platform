@@ -1,0 +1,28 @@
+*   [33m22ad68b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #7 from devmaheshbuilds/dashboard-pr-new
+[31m|[m[32m\[m  
+[31m|[m * [33m781eb35[m[33m ([m[1;31morigin/dashboard-pr-new[m[33m)[m dashboard
+[31m|[m[31m/[m  
+*   [33m743f3c9[m Merge pull request #6 from devmaheshbuilds/merge/frontend-with-server
+[33m|[m[34m\[m  
+[33m|[m * [33mc66bf76[m[33m ([m[1;31morigin/merge/frontend-with-server[m[33m)[m Merge frontend mentor UI with server APIs and LoRA training.
+[33m|[m[33m/[m  
+*   [33mdb050cb[m Merge pull request #4 from devmaheshbuilds/initial-setup
+[35m|[m[36m\[m  
+* [36m\[m   [33m0a40257[m Merge pull request #3 from devmaheshbuilds/initial-setup
+[1;31m|[m[1;32m\[m [36m\[m  
+* [1;32m\[m [36m\[m   [33m4005767[m Merge pull request #2 from devmaheshbuilds/initial-setup
+[1;33m|[m[1;34m\[m [1;32m\[m [36m\[m  
+* [1;34m\[m [1;32m\[m [36m\[m   [33ma382df1[m Merge pull request #1 from devmaheshbuilds/initial-setup
+[1;35m|[m[1;36m\[m [1;34m\[m [1;32m\[m [36m\[m  
+[1;35m|[m [1;36m|[m [1;34m|[m [1;32m|[m [36m|[m * [33m17379f9[m[33m ([m[1;31morigin/initial-setup[m[33m)[m post methods
+[1;35m|[m [1;36m|[m [1;34m|[m [1;32m|[m [36m|[m[36m/[m  
+[1;35m|[m [1;36m|[m [1;34m|[m [1;32m|[m * [33mc312589[m completed the rest of the routes and controllers
+[1;35m|[m [1;36m|[m [1;34m|[m [1;32m|[m[1;32m/[m  
+[1;35m|[m [1;36m|[m [1;34m|[m * [33ma545ce5[m established routes abd controllers and connectivity to the data in supabase
+[1;35m|[m [1;36m|[m [1;34m|[m[1;34m/[m  
+[1;35m|[m [1;36m|[m * [33m3883094[m This push conatins the folder structureand all the files required.
+[1;35m|[m [1;36m|[m * [33mbe2ac54[m folder skeleton
+[1;35m|[m [1;36m|[m[1;36m/[m  
+[1;35m|[m * [33m2c7442f[m adding READMEs and git ignores
+[1;35m|[m[1;35m/[m  
+* [33m2f68c5c[m Initial commit
