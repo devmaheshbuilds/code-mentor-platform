@@ -1,4 +1,4 @@
-import Editor from '@monaco-editor/react'
+import Editor, { type OnMount } from '@monaco-editor/react'
 
 interface CodeEditorProps {
   value: string
@@ -6,6 +6,7 @@ interface CodeEditorProps {
   language?: string
   height?: string
   readOnly?: boolean
+  blockClipboard?: boolean
 }
 
 export function CodeEditor({
@@ -14,7 +15,24 @@ export function CodeEditor({
   language = 'python',
   height = '420px',
   readOnly = false,
+  blockClipboard = false,
 }: CodeEditorProps) {
+  const handleMount: OnMount = (editor, monaco) => {
+    if (!blockClipboard) return
+
+    const block = () => undefined
+
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, block)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, block)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyX, block)
+    editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Insert, block)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Insert, block)
+
+    editor.onDidPaste(() => {
+      editor.trigger('keyboard', 'undo', null)
+    })
+  }
+
   return (
     <Editor
       height={height}
@@ -22,6 +40,7 @@ export function CodeEditor({
       theme="vs-dark"
       value={value}
       onChange={(nextValue) => onChange(nextValue ?? '')}
+      onMount={handleMount}
       options={{
         minimap: {
           enabled: false,
@@ -36,6 +55,7 @@ export function CodeEditor({
           bottom: 12,
         },
         readOnly,
+        contextmenu: !blockClipboard,
       }}
     />
   )

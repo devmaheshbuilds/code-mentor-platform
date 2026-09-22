@@ -1,57 +1,52 @@
-import { useEffect, useState } from 'react'
-import type { CarouselItem } from './items'
-import { STAGE, coverScale, slotOffset } from './geometry'
-import {
-  useCarouselTrack,
-  type TrackOptions,
-} from './useCarouselTrack'
-import { TrackItem } from './TrackItem'
-import './carousel.css'
+import { useEffect, useState } from "react";
+import { ITEMS, type CarouselItem } from "./items";
+import { STAGE, coverScale, slotOffset } from "./geometry";
+import { useCarouselTrack, type TrackOptions } from "./useCarouselTrack";
+import { TrackItem } from "./TrackItem";
+import "./carousel.css";
 
-export type DiagonalCarouselProps = Omit<TrackOptions, 'count'> & {
-  items: CarouselItem[]
+export type DiagonalCarouselProps = Omit<TrackOptions, "count"> & {
+  items?: CarouselItem[];
 
   onCenterChange?: (
     item: CarouselItem,
-    index: number,
-  ) => void
+    index: number
+  ) => void;
 
-  onLessonStart?: (lessonId: string) => void
+  onLessonStart?: (lessonId: string) => void;
 
-  className?: string
-}
+  className?: string;
+};
 
 function useCoverScale() {
   const [scale, setScale] = useState(() =>
-    typeof window === 'undefined'
+    typeof window === "undefined"
       ? 1
-      : coverScale(window.innerWidth, window.innerHeight),
-  )
+      : coverScale(window.innerWidth, window.innerHeight)
+  );
 
   useEffect(() => {
-    function update() {
+    const update = () =>
       setScale(
         coverScale(
           window.innerWidth,
-          window.innerHeight,
-        ),
-      )
-    }
+          window.innerHeight
+        )
+      );
 
-    update()
+    update();
 
-    window.addEventListener('resize', update)
+    window.addEventListener("resize", update);
 
-    return () => {
-      window.removeEventListener('resize', update)
-    }
-  }, [])
+    return () =>
+      window.removeEventListener("resize", update);
+  }, []);
 
-  return scale
+  return scale;
 }
 
 export function DiagonalCarousel({
-  items,
+  items = ITEMS,
   onCenterChange,
   onLessonStart,
   className,
@@ -60,38 +55,32 @@ export function DiagonalCarousel({
   const [track, surfaceRef] = useCarouselTrack({
     count: items.length,
     ...options,
-  })
+  });
 
-  const scale = useCoverScale()
+  const scale = useCoverScale();
 
-  const { progress, centerIndex } = track
+  const { progress, centerIndex } = track;
 
   useEffect(() => {
-    const centeredItem = items[centerIndex]
-
-    if (!centeredItem) {
-      return
-    }
-
     onCenterChange?.(
-      centeredItem,
-      centerIndex,
-    )
+      items[centerIndex],
+      centerIndex
+    );
   }, [
     centerIndex,
     items,
     onCenterChange,
-  ])
+  ]);
 
   return (
     <div
       ref={surfaceRef}
       className={[
-        'dc-surface',
+        "dc-surface",
         className,
       ]
         .filter(Boolean)
-        .join(' ')}
+        .join(" ")}
       role="region"
       aria-roledescription="carousel"
       aria-label="Python Lessons"
@@ -104,24 +93,24 @@ export function DiagonalCarousel({
           transform: `translate(-50%, -50%) scale(${scale})`,
         }}
       >
-        {items.map((item, index) => {
+        {items.map((item, i) => {
           const slot = slotOffset(
-            index,
+            i,
             progress,
-            items.length,
-          )
+            items.length
+          );
 
           return (
             <TrackItem
               key={item.id}
               item={item}
               slot={slot}
-              centered={index === centerIndex}
+              centered={i === centerIndex}
               onStart={() =>
                 onLessonStart?.(item.id)
               }
             />
-          )
+          );
         })}
       </div>
 
@@ -132,5 +121,5 @@ export function DiagonalCarousel({
         {items[centerIndex]?.label}
       </p>
     </div>
-  )
+  );
 }

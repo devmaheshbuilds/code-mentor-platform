@@ -1,4 +1,5 @@
 import type { Language, Lesson, Module } from '../types'
+import { getFallbackModules } from './fallbackCurriculum'
 import { lessonVisuals } from '../data/lessonVisuals'
 
 const API_BASE_URL = ''
@@ -93,7 +94,7 @@ export async function getLanguages(): Promise<Language[]> {
   return languages.map(createLanguage)
 }
 
-export async function getModules(): Promise<Module[]> {
+async function fetchModulesFromApi(): Promise<Module[]> {
   const [languages, backendModules, backendLessons] = await Promise.all([
     getLanguages(),
     request<BackendModule[]>('/api/module'),
@@ -136,4 +137,12 @@ export async function getModules(): Promise<Module[]> {
         'Programming',
       lessons: lessonsByModule.get(module.id) ?? [],
     }))
+}
+
+export async function getModules(): Promise<Module[]> {
+  try {
+    return await fetchModulesFromApi()
+  } catch {
+    return getFallbackModules()
+  }
 }

@@ -1,0 +1,10 @@
+torch
+transformers
+datasets
+peft
+accelerate
+trl
+huggingface_hub
+fastapi
+uvicorn
+pyyaml

@@ -1,12 +1,36 @@
+import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { useUserStats } from "../hooks/useUserStats";
+import { supabase } from "../lib/supabase";
+import { goTo, requireAuth } from "../utils/navigation";
 
 function Dashboard() {
   const { darkMode, toggleTheme } = useTheme();
+  const stats = useUserStats();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  const goToLogin = () => {
-    window.history.pushState({}, "", "/login");
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  };
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUserEmail(data.session?.user?.email ?? null);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const goToLogin = () => goTo("/login");
+  const goToLessons = () => void requireAuth("/lessons");
+  const goToEditor = () => void requireAuth("/virtual-editor");
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    goTo("/");
+  }
 
   return (
     <div
@@ -74,26 +98,33 @@ function Dashboard() {
               Dashboard
             </a>
 
-            <a
-              href="#lessons"
+            <button
+              type="button"
+              onClick={goToLessons}
               className="transition-colors hover:text-blue-600"
             >
               Lessons
-            </a>
+            </button>
 
-            <a
-              href="#editor"
+            <button
+              type="button"
+              onClick={goToEditor}
               className="transition-colors hover:text-blue-600"
             >
               Virtual Editor
-            </a>
+            </button>
 
-            <a
-              href="#progress"
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById("progress")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
               className="transition-colors hover:text-blue-600"
             >
               Progress
-            </a>
+            </button>
           </div>
 
           {/* Right Side */}
@@ -112,17 +143,36 @@ function Dashboard() {
               {darkMode ? "☀️" : "🌙"}
             </button>
 
-            {/* Login */}
-            <button
-              onClick={goToLogin}
-              className={`liquid-glass rounded-full px-6 py-2.5 text-sm transition duration-300 hover:scale-[1.03] ${
-                darkMode
-                  ? "text-white"
-                  : "text-slate-900"
-              }`}
-            >
-              Login
-            </button>
+            {userEmail ? (
+              <>
+                <span
+                  className={`hidden text-sm md:inline ${
+                    darkMode ? "text-white/70" : "text-slate-600"
+                  }`}
+                >
+                  {userEmail}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className={`liquid-glass rounded-full px-6 py-2.5 text-sm transition duration-300 hover:scale-[1.03] ${
+                    darkMode ? "text-white" : "text-slate-900"
+                  }`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={goToLogin}
+                className={`liquid-glass rounded-full px-6 py-2.5 text-sm transition duration-300 hover:scale-[1.03] ${
+                  darkMode ? "text-white" : "text-slate-900"
+                }`}
+              >
+                Login
+              </button>
+            )}
           </div>
         </nav>
 
@@ -182,17 +232,18 @@ function Dashboard() {
             <div className="mt-12 flex flex-wrap justify-center gap-4 animate-fade-rise-delay-2">
 
               <button
-                onClick={goToLogin}
+                type="button"
+                onClick={goToLessons}
                 className={`liquid-glass rounded-full px-12 py-4 text-base transition duration-300 hover:scale-[1.03] ${
-                  darkMode
-                    ? "text-white"
-                    : "text-slate-900"
+                  darkMode ? "text-white" : "text-slate-900"
                 }`}
               >
                 Start Learning →
               </button>
 
               <button
+                type="button"
+                onClick={goToEditor}
                 className={`liquid-glass rounded-full px-10 py-4 text-base transition duration-300 hover:scale-[1.03] ${
                   darkMode
                     ? "text-white/80 hover:text-white"
@@ -223,7 +274,7 @@ function Dashboard() {
                     darkMode ? "text-white" : "text-slate-900"
                   }`}
                 >
-                  24
+                  {stats.lessonsCompleted}/{stats.lessonCount}
                 </p>
 
                 <p
@@ -231,7 +282,7 @@ function Dashboard() {
                     darkMode ? "text-cyan-300" : "text-blue-600"
                   }`}
                 >
-                  Available
+                  {stats.topicsCompleted} topics done
                 </p>
               </div>
 
@@ -252,11 +303,15 @@ function Dashboard() {
                     darkMode ? "text-white" : "text-slate-900"
                   }`}
                 >
-                  7 🔥
+                  {stats.streak} 🔥
                 </p>
 
                 <p className="mt-1 text-xs text-orange-500">
-                  Keep going
+                  {stats.streak === 0
+                    ? "Complete a topic today"
+                    : stats.streak === 1
+                      ? "Day 1 — keep it up"
+                      : "Keep going"}
                 </p>
               </div>
 
@@ -277,7 +332,7 @@ function Dashboard() {
                     darkMode ? "text-white" : "text-slate-900"
                   }`}
                 >
-                  68%
+                  {stats.progressPct}%
                 </p>
 
                 <div
@@ -286,9 +341,10 @@ function Dashboard() {
                   }`}
                 >
                   <div
-                    className={`h-full w-[68%] rounded-full ${
+                    className={`h-full rounded-full ${
                       darkMode ? "bg-white" : "bg-blue-600"
                     }`}
+                    style={{ width: `${stats.progressPct}%` }}
                   />
                 </div>
               </div>
@@ -310,7 +366,7 @@ function Dashboard() {
                     darkMode ? "text-white" : "text-slate-900"
                   }`}
                 >
-                  12 🏆
+                  {stats.achievementsUnlocked} 🏆
                 </p>
 
                 <p
@@ -318,7 +374,7 @@ function Dashboard() {
                     darkMode ? "text-purple-300" : "text-purple-600"
                   }`}
                 >
-                  Badges unlocked
+                  of {stats.achievementsTotal} badges
                 </p>
               </div>
             </div>
@@ -359,6 +415,8 @@ function Dashboard() {
               </p>
 
               <button
+                type="button"
+                onClick={goToLessons}
                 className={`liquid-glass mt-7 rounded-full px-7 py-3 text-sm transition hover:scale-105 ${
                   darkMode ? "text-white" : "text-slate-900"
                 }`}
@@ -399,6 +457,8 @@ function Dashboard() {
               </p>
 
               <button
+                type="button"
+                onClick={goToEditor}
                 className={`liquid-glass mt-7 rounded-full px-7 py-3 text-sm transition hover:scale-105 ${
                   darkMode ? "text-white" : "text-slate-900"
                 }`}
@@ -440,7 +500,7 @@ function Dashboard() {
                       darkMode ? "text-white/50" : "text-slate-600"
                     }`}
                   >
-                    You're 68% through your current learning journey.
+                    You're {stats.progressPct}% through your learning journey ({stats.topicsCompleted}/{stats.topicsTotal} topics).
                   </p>
                 </div>
 
@@ -449,7 +509,7 @@ function Dashboard() {
                     darkMode ? "text-white" : "text-slate-900"
                   }`}
                 >
-                  68%
+                  {stats.progressPct}%
                 </p>
               </div>
 
@@ -459,9 +519,10 @@ function Dashboard() {
                 }`}
               >
                 <div
-                  className={`h-full w-[68%] rounded-full ${
+                  className={`h-full rounded-full ${
                     darkMode ? "bg-white" : "bg-blue-600"
                   }`}
+                  style={{ width: `${stats.progressPct}%` }}
                 />
               </div>
             </div>

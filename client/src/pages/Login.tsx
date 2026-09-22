@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { consumeAuthRedirect, goTo } from '../utils/navigation'
 import './Auth.css'
-
-function goTo(path: string) {
-  window.history.pushState({}, '', path)
-  window.dispatchEvent(new PopStateEvent('popstate'))
-}
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -34,7 +30,7 @@ export default function Login() {
       return
     }
 
-    goTo('/dashboard')
+    goTo(consumeAuthRedirect('/dashboard'))
     setLoading(false)
   }
 

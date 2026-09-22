@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ExecutionResult } from '../types'
+import { runPlaygroundCode } from '../api/playground'
 import { CodeEditor } from '../components/editor/CodeEditor'
 import './VirtualEditor.css'
 
@@ -14,20 +15,27 @@ export function VirtualEditor() {
   const [result, setResult] = useState<ExecutionResult | null>(null)
   const [running, setRunning] = useState(false)
 
-  function handleRun() {
+  async function handleRun() {
     if (running) return
 
     setRunning(true)
     setResult(null)
 
-    setResult({
-      success: false,
-      output: '',
-      error:
-        'Standalone code execution is not connected to the backend yet.',
-    })
-
-    setRunning(false)
+    try {
+      const executionResult = await runPlaygroundCode(code)
+      setResult(executionResult)
+    } catch (requestError) {
+      setResult({
+        success: false,
+        output: '',
+        error:
+          requestError instanceof Error
+            ? requestError.message
+            : 'Unable to run the code right now.',
+      })
+    } finally {
+      setRunning(false)
+    }
   }
 
   return (

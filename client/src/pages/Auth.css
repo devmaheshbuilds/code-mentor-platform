@@ -11,6 +11,14 @@
   color: #0f172a;
 }
 
+html.dark-mode .auth-page {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.16), transparent 35%),
+    #05070b;
+  color: #f8fafc;
+}
+
 .auth-card {
   width: min(100%, 480px);
   padding: 36px;
@@ -19,6 +27,12 @@
   background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(18px);
   box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+}
+
+html.dark-mode .auth-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.82);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
 }
 
 .auth-header {
