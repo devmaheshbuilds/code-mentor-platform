@@ -3,18 +3,25 @@
    ========================================= */
 
 .lesson-page {
+  position: relative;
   width: 100%;
   min-height: 100vh;
-
   box-sizing: border-box;
-
   padding: 40px 7% 70px;
-
-  background: #050505;
+  background:
+    radial-gradient(ellipse 70% 45% at 10% -5%, rgba(0, 169, 157, 0.14), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 95% 10%, rgba(124, 58, 237, 0.1), transparent 50%),
+    #050505;
   color: white;
-
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.lesson-page__glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 169, 157, 0.06), transparent 40%);
 }
 
 
@@ -74,12 +81,37 @@
 
 .lesson-page-header p {
   margin: 0;
-
   color: #999;
-
   font-size: 18px;
-
   line-height: 1.5;
+}
+
+.lesson-progress {
+  margin-top: 28px;
+  max-width: 520px;
+}
+
+.lesson-progress__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.lesson-progress__track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.lesson-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #00a99d, #34d399);
+  transition: width 0.4s ease;
 }
 
 
@@ -96,8 +128,20 @@
 
 .subtopics-container h2 {
   font-size: 26px;
+  margin: 0 0 10px;
+}
 
+.subtopics-flow-hint {
   margin: 0 0 22px;
+  color: #777;
+  font-size: 15px;
+  max-width: 620px;
+  line-height: 1.55;
+}
+
+.subtopics-flow-hint strong {
+  color: #00a99d;
+  font-weight: 700;
 }
 
 
@@ -123,6 +167,7 @@
    ========================================= */
 
 .subtopic-card {
+  animation: subtopic-card-in 0.35s ease both;
   width: 100%;
 
   min-height: 82px;
@@ -159,10 +204,22 @@
 
 .subtopic-card:hover {
   border-color: #00a99d;
-
   background: #101515;
-
   transform: translateX(5px);
+}
+
+.subtopic-card.is-complete {
+  border-color: rgba(0, 169, 157, 0.35);
+  background: linear-gradient(135deg, rgba(0, 169, 157, 0.08), rgba(13, 13, 13, 0.95));
+}
+
+.subtopic-card.is-complete .subtopic-number {
+  background: #00a99d;
+  color: #001;
+}
+
+.subtopic-card.is-complete .subtopic-arrow {
+  color: #fbbf24;
 }
 
 
@@ -240,6 +297,17 @@
 /* =========================================
    MOBILE
    ========================================= */
+
+@keyframes subtopic-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 @media (max-width: 700px) {
 

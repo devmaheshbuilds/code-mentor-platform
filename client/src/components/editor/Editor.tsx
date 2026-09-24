@@ -1,68 +1,58 @@
-// During explain: read-only lines, green = current line. During practice: empty box.
-import { useMentor } from '../../context/MentorContext'
+import { useState } from 'react'
+import { CodeEditor } from './CodeEditor'
 import './Editor.css'
 
-const EXAMPLE = `name = "Manas"
-age = 19
+const STARTER_CODE = `# Write your Python code here
+
+name = "Code Mentor"
 print(name)
 `
 
 export function Editor() {
-  const { code, setCode, phase, partIndex, partCount, currentPart, resetLesson } = useMentor()
-  const locked = phase === 'explain'
-  const lines = code.split(/\r?\n/)
+  const [code, setCode] = useState(STARTER_CODE)
+  const [output, setOutput] = useState('')
+
+  function handleRun() {
+    setOutput('Run button is ready. Code execution will be connected in the next step.')
+  }
 
   return (
     <section className="panel editor">
       <header className="panel__header">
-        <h2>{phase === 'practice' ? 'Type this line' : 'Your code'}</h2>
-        {phase === 'ready' ? (
-          <button type="button" className="btn btn--ghost" onClick={() => setCode(EXAMPLE)}>
-            Load example
-          </button>
-        ) : (
-          <button type="button" className="btn btn--ghost" onClick={resetLesson}>
-            Edit code again
-          </button>
-        )}
+        <div>
+          <h2>Python Editor</h2>
+          <p className="editor__subtitle">
+            Write your Python code and run it when you are ready.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={handleRun}
+        >
+          Run
+        </button>
       </header>
 
-      <p className="editor__help">
-        {phase === 'explain'
-          ? `The green line is the only line we are explaining now (${partIndex + 1} of ${partCount}).`
-          : phase === 'practice'
-            ? `Write line ${partIndex + 1} of ${partCount} yourself. Use hints if you get stuck.`
-            : 'Type Python here, then press Explain my code.'}
-      </p>
+      <div className="editor__monaco">
+        <CodeEditor
+          value={code}
+          onChange={setCode}
+          language="python"
+          height="430px"
+        />
+      </div>
 
-      {locked ? (
-        <ol className="editor__lines">
-          {lines.map((line, index) => {
-            const active = currentPart ? line.trim() === currentPart.line : false
-            return (
-              <li key={`${index}-${line}`} className={active ? 'is-active' : undefined}>
-                <span className="editor__n">{index + 1}</span>
-                <code>{line || ' '}</code>
-                {active ? <span className="editor__now">this line</span> : null}
-              </li>
-            )
-          })}
-        </ol>
-      ) : (
-        <>
-          <label className="sr-only" htmlFor="code-editor">
-            Python code
-          </label>
-          <textarea
-            id="code-editor"
-            className="editor__textarea"
-            spellCheck={false}
-            value={code}
-            onChange={(event) => setCode(event.target.value)}
-            placeholder={phase === 'practice' ? 'Type the line here' : 'name = "Manas"'}
-          />
-        </>
-      )}
+      <section className="editor__output">
+        <div className="editor__output-header">
+          <h3>Output</h3>
+        </div>
+
+        <pre className="editor__output-content">
+          {output || 'Run your code to see the output here.'}
+        </pre>
+      </section>
     </section>
   )
 }

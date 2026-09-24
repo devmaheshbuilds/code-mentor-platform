@@ -3,12 +3,14 @@
  * Mounts REST routes used by the lesson / progress / hint APIs
  * and sends any thrown errors to the shared error handler.
  */
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const express = require('express');
-const app = express();
-const PORT = 3000;
 const cors = require('cors');
-app.use(cors());
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 
 // Domain routes — each file owns one Supabase table.
@@ -20,8 +22,10 @@ const progressRoutes = require('./routes/progress.routes');
 const hint_logsRoutes = require('./routes/hint_logs.routes');
 const paste_eventsRoutes = require('./routes/paste_events.routes');
 const mentorRoutes = require('./routes/mentor.routes');
+const executeRoutes = require('./routes/execute.routes');
 
 app.use('/api/mentor', mentorRoutes);
+app.use('/api/execute', executeRoutes);
 app.use('/api/languages', languageRoutes);
 app.use('/api/module', moduleRoutes);
 app.use('/api/lessons', lessonRoutes);

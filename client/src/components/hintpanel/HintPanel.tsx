@@ -1,131 +1,110 @@
-// Mentor chat + the buttons that drive explain / practice.
-import { useEffect, useRef, useState } from 'react'
-import { useMentor } from '../../context/MentorContext'
+import { useState } from 'react'
+import type { HintResponse } from '../../types'
 import './HintPanel.css'
 
-export function HintPanel() {
-  const {
-    messages,
-    phase,
-    partIndex,
-    partCount,
-    hintUsed,
-    startExplain,
-    sayNothing,
-    askDetail,
-    sayGotThis,
-    sayUnderstoodAll,
-    askPracticeHint,
-    checkPracticeLine,
-    sendInOwnWords,
-    resetLesson,
-    currentPart,
-  } = useMentor()
-  const endRef = useRef<HTMLDivElement>(null)
-  const [ownWords, setOwnWords] = useState('')
+interface HintPanelProps {
+  onRequestHint?: (hintLevel: number) => Promise<HintResponse | null>
+  disabled?: boolean
+}
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+export function HintPanel({
+  onRequestHint,
+  disabled = false,
+}: HintPanelProps) {
+  const [hintLevel, setHintLevel] = useState(0)
+  const [hints, setHints] = useState<HintResponse[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const submitWords = () => {
-    sendInOwnWords(ownWords)
-    setOwnWords('')
+  async function handleHint() {
+    if (!onRequestHint || loading) {
+      return
+    }
+
+    const nextLevel = hintLevel + 1
+
+    if (nextLevel > 5) {
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await onRequestHint(nextLevel)
+
+      if (response) {
+        setHints((current) => [...current, response])
+        setHintLevel(nextLevel)
+      }
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Unable to get a hint right now.',
+      )
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <section className="panel hint-panel">
       <header className="panel__header">
         <div>
-          <h2>Mentor</h2>
-          {partCount > 0 ? (
-            <p className="hint-panel__status">
-              {phase === 'practice'
-                ? `Practice line ${partIndex + 1} of ${partCount} · Hint ${hintUsed}/5`
-                : phase === 'explain'
-                  ? `Explaining part ${partIndex + 1} of ${partCount}`
-                  : phase === 'done'
-                    ? 'Practice finished'
-                    : 'Ready'}
-            </p>
-          ) : null}
+          <h2>AI Mentor</h2>
+          <p className="hint-panel__subtitle">
+            Need help? Ask for a hint without getting the full answer.
+          </p>
         </div>
-        <button type="button" className="btn btn--ghost" onClick={resetLesson}>
-          Start over
-        </button>
+
+        <span className="hint-panel__counter">
+          {hintLevel}/5
+        </span>
       </header>
 
-      {phase === 'explain' && currentPart ? (
-        <p className="hint-panel__focus">
-          Now explaining: <code>{currentPart.line}</code>
-        </p>
-      ) : null}
+      <div className="hint-panel__body">
+        {hints.length === 0 ? (
+          <div className="hint-panel__empty">
+            <strong>Stuck on your code?</strong>
+            <p>
+              The mentor can guide you step by step. Each new hint gives you
+              a little more help.
+            </p>
+          </div>
+        ) : (
+          <div className="hint-panel__messages">
+            {hints.map((hint) => (
+              <article
+                key={hint.hintLevel}
+                className="hint-panel__message"
+              >
+                <span>Hint {hint.hintLevel}</span>
+                <p>{hint.hint}</p>
+              </article>
+            ))}
+          </div>
+        )}
 
-      <div className="hint-panel__thread" role="log" aria-live="polite">
-        {messages.map((message) => (
-          <article key={message.id} className={`hint-bubble hint-bubble--${message.kind}`}>
-            {message.title ? <h3>{message.title}</h3> : null}
-            <p>{message.body}</p>
-          </article>
-        ))}
-        <div ref={endRef} />
+        {error ? (
+          <p className="hint-panel__error">
+            {error}
+          </p>
+        ) : null}
       </div>
 
-      {phase === 'ready' || phase === 'done' ? (
-        <div className="hint-panel__actions">
-          <button type="button" className="btn btn--primary" onClick={startExplain}>
-            Explain my code
-          </button>
-        </div>
-      ) : null}
-
-      {phase === 'explain' ? (
-        <div className="hint-panel__interact">
-          <p className="hint-panel__prompt">What did you understand?</p>
-          <div className="hint-panel__actions">
-            <button type="button" className="btn" onClick={sayNothing}>
-              I understood nothing
-            </button>
-            <button type="button" className="btn" onClick={askDetail}>
-              Explain in detail
-            </button>
-            <button type="button" className="btn btn--primary" onClick={sayGotThis}>
-              I got this part
-            </button>
-            <button type="button" className="btn" onClick={sayUnderstoodAll}>
-              I understood everything
-            </button>
-          </div>
-          <div className="hint-panel__own">
-            <label className="sr-only" htmlFor="own-words">
-              Say it in your words
-            </label>
-            <input
-              id="own-words"
-              value={ownWords}
-              onChange={(event) => setOwnWords(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') submitWords()
-              }}
-              placeholder="Or type it in your words..."
-            />
-            <button type="button" className="btn" onClick={submitWords}>
-              Send
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {phase === 'practice' ? (
-        <div className="hint-panel__actions">
-          <button type="button" className="btn" onClick={askPracticeHint} disabled={hintUsed >= 5}>
-            {hintUsed >= 5 ? 'Line already shown' : `Give hint ${hintUsed + 1}`}
-          </button>
-          <button type="button" className="btn btn--primary" onClick={checkPracticeLine}>
-            Check my line
-          </button>
-        </div>
-      ) : null}
+      <button
+        type="button"
+        className="btn btn--primary hint-panel__button"
+        onClick={handleHint}
+        disabled={disabled || loading || hintLevel >= 5}
+      >
+        {loading
+          ? 'Thinking...'
+          : hintLevel >= 5
+            ? 'All hints used'
+            : `Give me hint ${hintLevel + 1}`}
+      </button>
     </section>
   )
 }

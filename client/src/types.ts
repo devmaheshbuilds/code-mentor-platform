@@ -1,23 +1,58 @@
-// Shared types for the interactive Python lesson (explain → practice).
-export type MessageKind = 'welcome' | 'mentor' | 'you'
+export type Language = {
+  id: number
+  name: string
+  slug: string
+}
 
-export type LessonPhase = 'ready' | 'explain' | 'practice' | 'done'
+export type LessonVisual =
+  | {
+      type: 'diagram'
+      title: string
+      description: string
+      steps: string[]
+    }
+  | {
+      type: 'video'
+      title: string
+      description: string
+      url: string
+    }
 
-export interface MentorMessage {
+export type Lesson = {
   id: string
-  kind: MessageKind
-  title?: string
-  body: string
+  moduleId: string
+  title: string
+  description: string
+  explanation: string
+  starterCode: string
+  visual: LessonVisual
 }
 
-export interface CodePart {
-  line: string
-  short: string
-  wordByWord: string
-  detailed: string
-  hints: [string, string, string, string, string]
+export type Module = {
+  id: string
+  languageId: number
+  title: string
+  description: string
+  lessons: Lesson[]
 }
 
-export interface Lesson {
-  parts: CodePart[]
+export type ExecutionResult = {
+  success: boolean
+  output: string
+  error?: string
+  status?: string
+  executionTime?: number
+}
+
+export type HintRequest = {
+  code: string
+  lessonId: string
+  lessonTitle: string
+  lessonExplanation: string
+  hintLevel: number
+}
+
+export type HintResponse = {
+  hint: string
+  hintLevel: number
 }
