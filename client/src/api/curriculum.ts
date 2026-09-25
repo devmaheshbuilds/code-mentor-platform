@@ -1,8 +1,7 @@
 import type { Language, Lesson, Module } from '../types'
+import { apiUrl } from '../lib/apiBase'
 import { getFallbackModules } from './fallbackCurriculum'
 import { lessonVisuals } from '../data/lessonVisuals'
-
-const API_BASE_URL = ''
 
 interface ApiResponse<T> {
   statusCode: number
@@ -71,7 +70,7 @@ function createLesson(lesson: BackendLesson): Lesson {
 }
 
 async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`)
+  const response = await fetch(apiUrl(path))
 
   let data: ApiResponse<T>
 

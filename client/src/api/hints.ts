@@ -1,4 +1,5 @@
 import type { HintRequest, HintResponse } from '../types'
+import { apiUrl } from '../lib/apiBase'
 import { supabase } from '../lib/supabase'
 
 interface HintApiResponse {
@@ -41,7 +42,7 @@ export async function requestHint(
     'Do not give me the complete solution or replacement code.',
   ].join('\n')
 
-  const response = await fetch('/api/mentor/hint', {
+  const response = await fetch(apiUrl('/api/mentor/hint'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

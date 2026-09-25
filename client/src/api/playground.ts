@@ -1,4 +1,5 @@
 import type { ExecutionResult } from '../types'
+import { apiUrl } from '../lib/apiBase'
 
 interface ExecuteResponse {
   statusCode: number
@@ -11,7 +12,7 @@ interface ExecuteResponse {
 export async function runPlaygroundCode(
   code: string,
 ): Promise<ExecutionResult> {
-  const response = await fetch('/api/execute', {
+  const response = await fetch(apiUrl('/api/execute'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code }),

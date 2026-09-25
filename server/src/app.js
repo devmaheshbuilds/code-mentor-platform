@@ -10,8 +10,18 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const corsOptions = {
+    origin: process.env.CLIENT_URL
+        ? process.env.CLIENT_URL.split(',').map((value) => value.trim())
+        : true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+app.get('/health', (_req, res) => {
+    res.json({ ok: true, service: 'code-mentor-api' });
+});
 
 // Domain routes — each file owns one Supabase table.
 const languageRoutes = require('./routes/language.routes');
@@ -44,6 +54,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`App is running on port ${PORT}`);
 });

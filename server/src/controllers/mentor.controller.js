@@ -4,8 +4,11 @@ const ApiResponse = require("../utils/ApiResponse");
 const pool = require("../config/db");
 const axios = require("axios");
 
-const AI_SERVICE_URL =
-    process.env.AI_SERVICE_URL || "http://127.0.0.1:8000/hint";
+const AI_SERVICE_BASE =
+    process.env.AI_SERVICE_URL || "http://127.0.0.1:8000";
+const AI_SERVICE_URL = AI_SERVICE_BASE.endsWith("/hint")
+    ? AI_SERVICE_BASE
+    : `${AI_SERVICE_BASE.replace(/\/$/, "")}/hint`;
 
 // POST /api/mentor/hint
 const getHint = asyncHandler(async (req, res) => {
