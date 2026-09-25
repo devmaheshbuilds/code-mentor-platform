@@ -54,6 +54,18 @@ app.use((err, req, res, next) => {
     });
 });
 
+const serveClient =
+    process.env.NODE_ENV === 'production' ||
+    process.env.SERVE_CLIENT === 'true';
+
+if (serveClient) {
+    const clientDist = path.join(__dirname, '../../client/dist');
+    app.use(express.static(clientDist));
+    app.get(/^(?!\/api).*/, (_req, res) => {
+        res.sendFile(path.join(clientDist, 'index.html'));
+    });
+}
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`App is running on port ${PORT}`);
 });
