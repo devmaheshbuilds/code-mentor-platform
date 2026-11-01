@@ -1,6 +1,7 @@
 // Main learner screen: code on the left, mentor on the right.
 import { Editor } from '../components/editor/Editor'
 import { HintPanel } from '../components/hintpanel/HintPanel'
+import { Progress } from '../components/progresstracker/ProgressTracker'
 import './Workspace.css'
 
 export function Workspace() {
@@ -10,6 +11,8 @@ export function Workspace() {
         <h1>Code Mentor</h1>
         <p>I explain one easy part. You tell me what you got. Then you type the code yourself.</p>
       </header>
+
+      <Progress />
 
       <ol className="workspace__steps">
         <li>Write code and press Explain my code</li>

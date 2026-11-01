@@ -3,13 +3,25 @@
  * Mounts REST routes used by the lesson / progress / hint APIs
  * and sends any thrown errors to the shared error handler.
  */
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const express = require('express');
-const app = express();
-const PORT = 3000;
 const cors = require('cors');
-app.use(cors());
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+const corsOptions = {
+    origin: process.env.CLIENT_URL
+        ? process.env.CLIENT_URL.split(',').map((value) => value.trim())
+        : true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+app.get('/health', (_req, res) => {
+    res.json({ ok: true, service: 'code-mentor-api' });
+});
 
 // Domain routes — each file owns one Supabase table.
 const languageRoutes = require('./routes/language.routes');
@@ -20,8 +32,10 @@ const progressRoutes = require('./routes/progress.routes');
 const hint_logsRoutes = require('./routes/hint_logs.routes');
 const paste_eventsRoutes = require('./routes/paste_events.routes');
 const mentorRoutes = require('./routes/mentor.routes');
+const executeRoutes = require('./routes/execute.routes');
 
 app.use('/api/mentor', mentorRoutes);
+app.use('/api/execute', executeRoutes);
 app.use('/api/languages', languageRoutes);
 app.use('/api/module', moduleRoutes);
 app.use('/api/lessons', lessonRoutes);
@@ -40,6 +54,18 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
+const serveClient =
+    process.env.NODE_ENV === 'production' ||
+    process.env.SERVE_CLIENT === 'true';
+
+if (serveClient) {
+    const clientDist = path.join(__dirname, '../../client/dist');
+    app.use(express.static(clientDist));
+    app.get(/^(?!\/api).*/, (_req, res) => {
+        res.sendFile(path.join(clientDist, 'index.html'));
+    });
+}
+
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`App is running on port ${PORT}`);
 });
