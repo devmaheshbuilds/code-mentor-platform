@@ -5,7 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "db:setup": "node scripts/setup-db.js"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +21,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "ws": "^8.21.3"
   }
 }

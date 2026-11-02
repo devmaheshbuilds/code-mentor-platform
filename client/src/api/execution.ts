@@ -1,4 +1,5 @@
 import type { ExecutionResult } from '../types'
+import { apiUrl } from '../lib/apiBase'
 import { supabase } from '../lib/supabase'
 
 export interface RunCodeRequest {
@@ -42,7 +43,7 @@ export async function submitLessonCode(
     throw new Error('You must be logged in to run this lesson.')
   }
 
-  const response = await fetch(`/api/lessons/${lessonId}/submit`, {
+  const response = await fetch(apiUrl(`/api/lessons/${lessonId}/submit`), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
