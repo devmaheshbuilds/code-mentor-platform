@@ -5,7 +5,7 @@
  */
 import { parseExpr, PyFloat, render, type Expr, type PyVal } from '../miniPython'
 import {
-  BUILTINS,
+  //BUILTINS,
   HEADER_KINDS,
   analyzeLines,
   definedNameToken,
@@ -257,11 +257,13 @@ const MODULE_VALUES: Record<string, Phrase> = {
   'numpy.array': (a) => a[0] && `a numpy array made from ${a[0]}`,
   'math.sqrt': (a) => a[0] && `the square root of ${a[0]}`,
   'math.floor': (a) => a[0] && `${a[0]} rounded down to a whole number`,
-  'math.ceil': (a) => a[0] && `${a[0]} rounded up to a whole number`,
-  'random.randint': (a) => a.length === 2 && `a random whole number from ${a[0]} to ${a[1]}`,
+  'math.ceil': (a) => a[0] && `${a[0]} rounded up to a whole number`,'random.randint': (a) => a.length === 2
+  ? `a random whole number from ${a[0]} to ${a[1]}`: undefined,
   'random.choice': (a) => a[0] && `a random item from ${a[0]}`,
   'random.random': () => `a random decimal number between ${code('0')} and ${code('1')}`,
-  'os.path.join': (a) => a.length > 0 && `a file path made by joining ${listWords(a)}`,
+  'os.path.join': (a) => a.length > 0
+  ? `a file path made by joining ${listWords(a)}`
+  : undefined,
   'os.path.exists': (a) => a[0] && `whether the file or folder ${a[0]} exists`,
   'json.load': (a) => a[0] && `the data read from the JSON file ${a[0]}`,
   'json.loads': (a) => a[0] && `the data inside the JSON text ${a[0]}`,
@@ -276,10 +278,12 @@ const MODULE_ACTIONS: Record<string, Phrase> = {
       ? `Start a new, empty chart (a figure) that is ${s(size.items[0])} × ${s(size.items[1])} inches`
       : 'Start a new, empty chart (a figure)'
   },
-  [`${PLT}.plot`]: (a) =>
-    a.length >= 2 ? `Draw a line chart: ${a[0]} along the bottom (x-axis) and ${a[1]} up the side (y-axis)` : a[0] && `Draw a line chart of ${a[0]}`,
-  [`${PLT}.scatter`]: (a) => a.length >= 2 && `Draw a scatter chart (one dot per point) of ${a[1]} against ${a[0]}`,
-  [`${PLT}.bar`]: (a) => a.length >= 2 && `Draw a bar chart with bars at ${a[0]} and heights ${a[1]}`,
+  [`${PLT}.scatter`]: (a) => a.length >= 2
+  ? `Draw a scatter chart (one dot per point) of ${a[1]} against ${a[0]}`
+  : undefined,
+  [`${PLT}.bar`]: (a) => a.length >= 2
+  ? `Draw a bar chart with bars at ${a[0]} and heights ${a[1]}`
+  : undefined,
   [`${PLT}.hist`]: (a) => a[0] && `Draw a histogram (bars showing how often each value appears) of ${a[0]}`,
   [`${PLT}.xlabel`]: (a) => a[0] && `Write the label ${a[0]} under the x-axis (the bottom edge of the chart)`,
   [`${PLT}.ylabel`]: (a) => a[0] && `Write the label ${a[0]} beside the y-axis (the left edge of the chart)`,
@@ -290,7 +294,9 @@ const MODULE_ACTIONS: Record<string, Phrase> = {
   [`${PLT}.savefig`]: (a) => a[0] && `Save the chart as the image file ${a[0]}`,
   [`${PLT}.show`]: () => 'Show the finished chart in a window',
   [`${PLT}.close`]: () => 'Close the chart',
-  'json.dump': (a) => a.length >= 2 && `Save ${a[0]} as JSON text into ${a[1]}`,
+   'json.dump': (a) => a.length >= 2
+  ? `Save ${a[0]} as JSON text into ${a[1]}`
+  : undefined,
   'time.sleep': (a) => a[0] && `Pause the program for ${a[0]} seconds`,
   'random.shuffle': (a) => a[0] && `Shuffle ${a[0]} into a random order`,
   'random.seed': (a) => a[0] && `Fix the random numbers with the seed ${a[0]}, so every run gives the same “random” results`,
@@ -298,8 +304,17 @@ const MODULE_ACTIONS: Record<string, Phrase> = {
 
 /** Phrases for well-known functions brought in with `from … import`. */
 const IMPORTED_VALUES: Record<string, { say: Phrase; uses?: string[] }> = {
-  train_test_split: { say: (a) => a.length > 0 && `${listWords(a)} split into training and testing parts` },
-  accuracy_score: { say: (a) => a.length >= 2 && `the accuracy — the share of predictions in ${a[1]} that match the true answers in ${a[0]}` },
+ train_test_split: {
+  say: (a) => a.length > 0
+    ? `${listWords(a)} split into training and testing parts`
+    : undefined,
+},
+
+accuracy_score: {
+  say: (a) => a.length >= 2
+    ? `the accuracy — the share of predictions in ${a[1]} that match the true answers in ${a[0]}`
+    : undefined,
+},
   field: {
     say: (_a, e) => {
       const make = kwExpr(e, 'default_factory')
