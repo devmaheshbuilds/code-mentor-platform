@@ -1,7 +1,4 @@
-/**
- * TEMPLATE — review and replace with final legal copy before real launch.
- * These /terms, /privacy and /license pages are plain-language placeholders only.
- */
+
 import { useTheme } from '../context/ThemeContext'
 import { goTo } from '../utils/navigation'
 import './LegalDoc.css'
@@ -18,7 +15,7 @@ const COPY: Record<
 > = {
   terms: {
     title: 'Terms of use',
-    updated: 'Draft template',
+    updated: 'Last updated: November 2026',
     sections: [
       {
         heading: 'Learning use',
@@ -36,7 +33,7 @@ const COPY: Record<
   },
   privacy: {
     title: 'Privacy',
-    updated: 'Draft template',
+    updated: 'Last updated: November 2026',
     sections: [
       {
         heading: 'What we store',
@@ -58,11 +55,11 @@ const COPY: Record<
   },
   license: {
     title: 'License',
-    updated: 'Draft template',
+    updated: 'Last updated: November 2026',
     sections: [
       {
         heading: 'CodeMentor license',
-        body: 'License: to be decided by the team.',
+        body: 'CodeMentor is released under the MIT License. See the LICENSE file in the GitHub repository for the full text.',
       },
       {
         heading: 'Third-party libraries',
@@ -70,19 +67,19 @@ const COPY: Record<
       },
       {
         heading: 'Cat artwork — peek (cat-peek)',
-        body: 'Artist: [artist]. Source: [source link]. Licence: [licence]. Placeholder — replace with the real credit before release.',
+        body: 'Artist: Tom Fabre. Source: https://lottiefiles.com/free-animation/le-petit-chat-cat-noir-NY18MEMwbZ. Licence: Lottie Simple License.',
       },
       {
         heading: 'Cat artwork — alert (cat-alert)',
-        body: 'Artist: [artist]. Source: [source link]. Licence: [licence]. Placeholder — replace with the real credit before release.',
+        body: 'Artist: Нуртилек Орозов. Source: https://lottiefiles.com/free-animation/black-rainbow-cat-CuautyyKEp. Licence: Lottie Simple License.',
       },
       {
         heading: 'Cat artwork — sleep (cat-sleep)',
-        body: 'Artist: [artist]. Source: [source link]. Licence: [licence]. Placeholder — replace with the real credit before release.',
+        body: 'Artist: Panda Pixels. Source: https://lottiefiles.com/free-animation/sleeping-cat-k5rp4D22xZ. Licence: Lottie Simple License.',
       },
       {
         heading: 'Cat artwork — talk (cat-talk)',
-        body: 'Artist: [artist]. Source: [source link]. Licence: [licence]. Placeholder — replace with the real credit before release.',
+        body: 'Artist: Abdul Latif. Source: https://lottiefiles.com/free-animation/cat-movement-J2Rpkvoh5J. Licence: Lottie Simple License.',
       },
     ],
   },
