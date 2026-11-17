@@ -1,5 +1,10 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://code-mentor-platform-rmoe.onrender.com/api/:path*" }
+    { "source": "/api/:path*", "destination": "https://code-mentor-platform-rmoe.onrender.com/api/:path*" 
+    },
+    {
+      "source":"/(.*)",
+      "destination":"/index.html"
+    }
   ]
 }

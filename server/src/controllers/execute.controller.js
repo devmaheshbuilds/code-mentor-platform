@@ -117,6 +117,13 @@ const runCode = asyncHandler(async (req, res) => {
             );
         }
 
+        if (!apiKey) {
+    throw new ApiError(
+        503,
+        "Code execution is turned off in this demo.",
+    );
+}
+
         throw new ApiError(
             502,
             "Unable to run code right now. Please try again.",
